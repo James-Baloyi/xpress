@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+         apiResponse: "" 
+        };
+}
+
+async getData(port){
+    var url = `http://localhost:${port}/data/trimble`;
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, false);
+    await xhr.send();
+    var resp = xhr.responseText;
+    this.setState({apiResponse: resp})
+}
+componentDidMount() {
+    var port = process.env.PORT || 5000;
+    this.getData(port);
+}
+
+render(){
+return(
+<p>echo {this.state.apiResponse}</p>
+);
+
+}
 }
 
 export default App;
